@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useGetCalls } from "@/hooks/useGetCalls";
@@ -7,6 +8,11 @@ import React, { useEffect, useState } from "react";
 import MeetingCard from "./MeetingCard";
 import { Loader } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+
+// Type Guard untuk membedakan Call dari CallRecording
+const isCall = (meeting: Call | CallRecording): meeting is Call => {
+  return "id" in meeting;
+};
 
 const CallList = ({ type }: { type: "ended" | "upcoming" | "recordings" }) => {
   const { endedCalls, upcomingCalls, callRecordings, isLoading } =
@@ -29,6 +35,7 @@ const CallList = ({ type }: { type: "ended" | "upcoming" | "recordings" }) => {
         return [];
     }
   };
+
   const getNoCallsMessage = () => {
     switch (type) {
       case "ended":
@@ -62,11 +69,10 @@ const CallList = ({ type }: { type: "ended" | "upcoming" | "recordings" }) => {
     };
 
     if (type === "recordings") fetchRecordings();
-  }, [type, callRecordings, toast]); // Masukkan 'toast' di sini
+  }, [type, callRecordings, toast]);
 
   const calls = getCalls();
-  // const nocallsMessage = getNoCallsMessage();
-  const start_time = new Date(); // Atau nilai yang sesuai
+  const start_time = new Date();
   if (isLoading) return <Loader />;
 
   return (
@@ -74,7 +80,7 @@ const CallList = ({ type }: { type: "ended" | "upcoming" | "recordings" }) => {
       {calls && calls.length > 0 ? (
         calls.map((meeting: Call | CallRecording) => (
           <MeetingCard
-            key={(meeting as Call).id}
+            key={isCall(meeting) ? meeting.id : meeting.filename} // Gunakan `filename` jika `id` tidak tersedia
             icon={
               type === "ended"
                 ? "/icons/previous.svg"
@@ -101,18 +107,22 @@ const CallList = ({ type }: { type: "ended" | "upcoming" | "recordings" }) => {
             handleClick={
               type === "recordings"
                 ? () =>
-                    meeting.url
+                    "url" in meeting
                       ? router.push(`${meeting.url}`)
                       : console.error("URL not available")
                 : () =>
-                    meeting.id
+                    isCall(meeting)
                       ? router.push(`/meeting/${meeting.id}`)
                       : console.error("ID not available")
             }
             link={
               type === "recordings"
-                ? meeting.url
-                : `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${meeting.id}`
+                ? "url" in meeting
+                  ? meeting.url
+                  : "#"
+                : isCall(meeting)
+                ? `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${meeting.id}`
+                : "#"
             }
           />
         ))
