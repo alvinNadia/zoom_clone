@@ -7,7 +7,6 @@ import Link from "next/link";
 
 import clsx from "clsx";
 import Image from "next/image";
-import path from "path";
 
 const Sidebar = () => {
   const pathname = usePathname();

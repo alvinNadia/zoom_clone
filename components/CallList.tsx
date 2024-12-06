@@ -62,10 +62,10 @@ const CallList = ({ type }: { type: "ended" | "upcoming" | "recordings" }) => {
     };
 
     if (type === "recordings") fetchRecordings();
-  }, [type, callRecordings]);
+  }, [type, callRecordings, toast]); // Masukkan 'toast' di sini
 
   const calls = getCalls();
-  const nocallsMessage = getNoCallsMessage();
+  // const nocallsMessage = getNoCallsMessage();
   const start_time = new Date(); // Atau nilai yang sesuai
   if (isLoading) return <Loader />;
 

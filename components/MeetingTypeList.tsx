@@ -1,13 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import HomeCard from "./HomeCard";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import MeetingModal from "./MeetingModal";
 import { useUser } from "@clerk/nextjs";
 import { Call, useStreamVideoClient } from "@stream-io/video-react-sdk";
-import { start } from "repl";
+
 import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "./ui/textarea";
 import ReactDatePicker from "react-datepicker";
@@ -176,10 +175,10 @@ const MeetingTypeList = () => {
         buttonText="Join Meeting"
         handleClick={() => ruoter.push(values.link)}
       >
-        <Input 
+        <Input
           placeholder="Meeting link"
           className="border-none bg-dark-3 focus-visible:ring-0 focus-visible:ring-offset-0"
-          onChange={(e) => setValues({...values, link:e.target.value})}
+          onChange={(e) => setValues({ ...values, link: e.target.value })}
         />
       </MeetingModal>
     </section>

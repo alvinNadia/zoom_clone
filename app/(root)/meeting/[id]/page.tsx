@@ -12,7 +12,7 @@ import { useState } from "react";
 const Meeting = ({ params }: { params: { id: string } }) => {
   const { id } = params; // Pastikan id diakses dari params
 
-  const { user, isLoaded } = useUser(); // Untuk user authentication
+  const { isLoaded } = useUser(); // Untuk user authentication
   const [isSetupComplete, setIsSetupComplete] = useState(false);
   const { call, isCallLoading } = useGetCallById(id); // Panggil hook berdasarkan id
 

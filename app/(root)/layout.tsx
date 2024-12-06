@@ -1,5 +1,5 @@
 import StreamVideoProvider from '@/providers/StreamClientProvider'
-import React, { Children, ReactNode } from 'react'
+import React, { ReactNode } from 'react'
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -10,15 +10,14 @@ export const metadata: Metadata = {
   }
 };
 
-const RootLayout = ({children} : {children :
-ReactNode }) => {
+const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <main>
       <StreamVideoProvider>
-        {children}
+        {children} {/* Jangan dikomentari */}
       </StreamVideoProvider>
     </main>
-  )
-}
+  );
+};
 
-export default RootLayout
+export default RootLayout;

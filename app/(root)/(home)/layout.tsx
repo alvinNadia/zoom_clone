@@ -1,6 +1,6 @@
 import Navbar from '@/components/Navbar'
 import Sidebar from '@/components/Sidebar'
-import React, { Children, ReactNode } from 'react'
+import React, { ReactNode } from 'react'
 
 import { Metadata } from 'next';
 
@@ -22,9 +22,10 @@ ReactNode }) => {
             <Sidebar />
             <section className="flex min-h-screen flex-1 flex-col px-6 pt-28 max-md:pd-14 sm:px-14">
 
-                <div className='w-full'>
-                {children}
-                </div>
+              <div className='w-full'>
+                {children} {/* Aktifkan ini */}
+              </div>
+
             </section>
         </div>
     </main>
