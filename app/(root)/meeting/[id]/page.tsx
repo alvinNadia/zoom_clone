@@ -6,17 +6,23 @@ import MeetingSetup from "@/components/MeetingSetup";
 import { useGetCallById } from "@/hooks/useGetCallById";
 import { useUser } from "@clerk/nextjs";
 import { StreamCall, StreamTheme } from "@stream-io/video-react-sdk";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-// Pastikan Anda menerima params dengan cara yang kompatibel
-const Meeting = ({ params }: { params: { id: string } }) => {
-  const { id } = params; // Pastikan id diakses dari params
+interface PageProps {
+  params: Promise<{
+    id: string;
+  }>;
+}
+
+const Meeting = async ({ params }: PageProps) => {
+  const resolvedParams = await params; // Tunggu nilai params
+  const { id } = resolvedParams; // Ambil id dari resolvedParams
 
   const { isLoaded } = useUser(); // Untuk user authentication
   const [isSetupComplete, setIsSetupComplete] = useState(false);
   const { call, isCallLoading } = useGetCallById(id); // Panggil hook berdasarkan id
 
-  // Tampilkan loader jika data user atau call masih loading
+  // Loader jika data user atau call masih loading
   if (!isLoaded || isCallLoading) return <Loader />;
 
   return (
