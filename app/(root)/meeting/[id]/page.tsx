@@ -14,16 +14,28 @@ interface PageProps {
   }>;
 }
 
-const Meeting = async ({ params }: PageProps) => {
-  const resolvedParams = await params; // Tunggu nilai params
-  const { id } = resolvedParams; // Ambil id dari resolvedParams
-
-  const { isLoaded } = useUser(); // Untuk user authentication
+const Meeting = ({ params }: PageProps) => {
+  const [resolvedParams, setResolvedParams] = useState<{ id: string } | null>(null);
   const [isSetupComplete, setIsSetupComplete] = useState(false);
-  const { call, isCallLoading } = useGetCallById(id); // Panggil hook berdasarkan id
+  const { isLoaded } = useUser();
+  
+  // Verifikasi bahwa resolvedParams tidak null dan id ada
+  const id = resolvedParams?.id;
 
-  // Loader jika data user atau call masih loading
-  if (!isLoaded || isCallLoading) return <Loader />;
+  const { call, isCallLoading } = useGetCallById(id || ""); // Gunakan string kosong sebagai default jika id undefined
+
+  // Resolve params asynchronously
+  useEffect(() => {
+    const resolveParams = async () => {
+      const result = await params;
+      setResolvedParams(result); // Set params when resolved
+    };
+
+    resolveParams();
+  }, [params]);
+
+  // Loader jika user atau call sedang loading
+  if (!isLoaded || isCallLoading || !resolvedParams) return <Loader />;
 
   return (
     <main className="h-screen w-full">
